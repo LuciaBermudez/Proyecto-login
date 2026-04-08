@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Recuperar contraseña</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Recuperar contraseña</h2>
+
+    <input type="email" id="correo" placeholder="Correo">
+
+    <button type="button" onclick="recuperar()">Enviar correo</button>
+
+    <p id="mensaje"></p>
+</div>
+
+<script>
+function recuperar() {
+    const correo = document.getElementById("correo").value;
+    const mensaje = document.getElementById("mensaje");
+
+    if (!correo) {
+        mensaje.style.color = "red";
+        mensaje.innerText = "⚠️ Ingresa tu correo";
+        return;
+    }
+
+    fetch("http://localhost:3000/api/recuperar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ correo })
+    })
+    .then(res => res.json())
+    .then(data => {
+        mensaje.style.color = "green";
+        mensaje.innerText = "📧 " + data.mensaje;
+    })
+    .catch(() => {
+        mensaje.style.color = "red";
+        mensaje.innerText = "❌ Error al enviar correo";
+    });
+}
+</script>
+
+</body>
+</html>
